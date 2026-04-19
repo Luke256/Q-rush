@@ -1,0 +1,8 @@
+BGM:
+「夢見るターミナル」
+https://bgmer.net/music/237
+
+効果音:
+モーション スイング07 (OtoLogic)
+打撃 パンチ01 (OtoLogic)
+ひらめき03
