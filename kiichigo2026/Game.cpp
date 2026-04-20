@@ -5,11 +5,9 @@ Game::Game(const InitData& init)
 {
 	refreshLevel();
 	getData().score = 0;
-#ifndef SIV3D_WEB
 	getData().bgm.setLoop(true);
 	getData().bgm.setVolume(0.25);
 	getData().bgm.play();
-#endif
 }
 
 void Game::update()
@@ -40,18 +38,14 @@ void Game::draw() const
 
 void Game::nextLevel()
 {
-#ifndef SIV3D_WEB
 	getData().seOk.playOneShot(0.7);
-#endif
 
 	getData().score += 1;
 	if (levelStep[Min(m_difficulty, (int32)levelStep.size() - 1)] == getData().score)
 	{
 		m_difficulty++;
 		m_bgEffectInterval *= 0.8;
-#ifndef SIV3D_WEB
 		getData().seExtend.playOneShot(0.7);
-#endif
 	}
 
 	for (const auto& item : m_queItems)
@@ -74,8 +68,8 @@ void Game::refreshLevel()
 	m_queItems.clear();
 	m_splitItems.clear();
 
-	const int32 QueLineUpY = 200;
-	const int32 GroupLineUpY = 400;
+	const int32 QueLineUpY = Scene::Height() / 2 - 100;
+	const int32 GroupLineUpY = Scene::Height() / 2 + 100;
 
 	for (auto x : m_levelData.queue)
 	{
@@ -229,15 +223,11 @@ void Game::inGameUpdate()
 			if (item.active)
 			{
 				m_effects.add<SlashEffect>(item.pos + Vec2{ 0, 60 }, 120);
-#ifndef SIV3D_WEB
 				getData().seSlash.playOneShot(0.4, (item.pos.x - Scene::Width() / 2) / Scene::Width() * 2);
-#endif
 			}
 			else
 			{
-#ifndef SIV3D_WEB
 				getData().seUnslash.playOneShot(0.4, (item.pos.x - Scene::Width() / 2) / Scene::Width() * 2);
-#endif
 			}
 		}
 	}
@@ -286,10 +276,8 @@ void Game::gameOver()
 	GamePhase = Result;
 	m_resultTimer = 0.0;
 
-#ifndef SIV3D_WEB
 	getData().bgm.fadeVolume(0.1, 1s);
 	getData().seMiss.playOneShot(0.7);
-#endif
 }
 
 void Game::resultUpdate()
@@ -298,9 +286,7 @@ void Game::resultUpdate()
 
 	if (m_resultTimer > 1.0 and MouseL.down())
 	{
-#ifndef SIV3D_WEB
 		getData().bgm.stop(1s);
-#endif
 		changeScene(U"Title");
 	}
 }
@@ -323,10 +309,10 @@ void Game::resultDraw() const
 		return;
 	}
 
-	FontAsset(U"font")(U"スコア:").draw(Arg::rightCenter(Scene::Width() / 2, 250));
-	FontAsset(U"font")(U"{}"_fmt(getData().score)).draw(Arg::leftCenter(Scene::Width() / 2 + 20, 250));
-	FontAsset(U"font")(U"難易度:").draw(Arg::rightCenter(Scene::Width() / 2, 350));
-	FontAsset(U"font")(U"{}"_fmt(m_difficulty + 1)).draw(Arg::leftCenter(Scene::Width() / 2 + 20, 350));
+	FontAsset(U"font")(U"スコア:").draw(Arg::rightCenter(Scene::Width() / 2, Scene::Height() / 2 - 50));
+	FontAsset(U"font")(U"{}"_fmt(getData().score)).draw(Arg::leftCenter(Scene::Width() / 2 + 20, Scene::Height() / 2 - 50));
+	FontAsset(U"font")(U"難易度:").draw(Arg::rightCenter(Scene::Width() / 2, Scene::Height() / 2 + 50));
+	FontAsset(U"font")(U"{}"_fmt(m_difficulty + 1)).draw(Arg::leftCenter(Scene::Width() / 2 + 20, Scene::Height() / 2 + 50));
 
-	FontAsset(U"font")(U"クリックしてタイトルへ").drawAt(24, Vec2{ Scene::Width() / 2, 500 }, Palette::White);
+	FontAsset(U"font")(U"クリックしてタイトルへ").drawAt(24, Vec2{ Scene::Width() / 2, Scene::Height() - 100 }, Palette::White);
 }
