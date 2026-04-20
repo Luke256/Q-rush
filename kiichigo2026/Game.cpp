@@ -194,11 +194,6 @@ void Game::inGameUpdate()
 		m_effects.add<BubbleEffect>();
 	}
 
-	if (KeySpace.down())
-	{
-		nextLevel();
-	}
-
 	for (auto& item : m_queItems)
 	{
 		item.update();
@@ -240,7 +235,7 @@ void Game::inGameUpdate()
 		nextLevel();
 	}
 
-	if (m_timeLimit <= 0.0 or KeyF9.down())
+	if (m_timeLimit <= 0.0)
 	{
 		gameOver();
 	}

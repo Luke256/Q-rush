@@ -4,7 +4,7 @@
 class IMyEffect
 {
 public:
-	~IMyEffect() = default;
+	virtual ~IMyEffect() = default;
 	virtual bool update() = 0; // true なら継続、false なら終了
 	virtual void draw() const = 0;
 };
