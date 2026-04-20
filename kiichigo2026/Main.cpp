@@ -29,12 +29,19 @@ void Main()
 	FontAsset::Register(U"font", FontMethod::MSDF, 60, Typeface::Bold);
 
 #ifndef SIV3D_WEB
-	AudioAsset::Register(U"bgm", Audio::Stream, Resource(U"data/237_BPM152.mp3"));
-	AudioAsset::Register(U"slash", Resource(U"data/Motion-Swish07-1.mp3"));
-	AudioAsset::Register(U"unslash", Resource(U"data/Motion-Swish07-4.mp3"));
-	AudioAsset::Register(U"miss", Resource(U"data/Hit-Punch01-2.mp3"));
-	AudioAsset::Register(U"ok", Resource(U"data/Inspiration03-1(High).mp3"));
-	AudioAsset::Register(U"extend", Resource(U"data/Single_Accent13-1(Dry).mp3"));
+	//AudioAsset::Register(U"bgm", Audio::Stream, Resource(U"data/237_BPM152.mp3"));
+	//AudioAsset::Register(U"slash", Resource(U"data/Motion-Swish07-1.mp3"));
+	//AudioAsset::Register(U"unslash", Resource(U"data/Motion-Swish07-4.mp3"));
+	//AudioAsset::Register(U"miss", Resource(U"data/Hit-Punch01-2.mp3"));
+	//AudioAsset::Register(U"ok", Resource(U"data/Inspiration03-1(High).mp3"));
+	//AudioAsset::Register(U"extend", Resource(U"data/Single_Accent13-1(Dry).mp3"));
+
+	manager.get()->bgm = Audio(Resource(U"data/237_BPM152.mp3"));
+	manager.get()->seSlash = Audio(Resource(U"data/Motion-Swish07-1.mp3"));
+	manager.get()->seUnslash = Audio(Resource(U"data/Motion-Swish07-4.mp3"));
+	manager.get()->seMiss = Audio(Resource(U"data/Hit-Punch01-2.mp3"));
+	manager.get()->seOk = Audio(Resource(U"data/Inspiration03-1(High).mp3"));
+	manager.get()->seExtend = Audio(Resource(U"data/Single_Accent13-1(Dry).mp3"));
 #endif
 
 	while (System::Update())

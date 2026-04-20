@@ -6,6 +6,8 @@
 struct GameData
 {
 	int32 score;
+	Audio bgm;
+	Audio seSlash, seUnslash, seMiss, seOk, seExtend;
 };
 
 using MyApp = SceneManager<String, GameData>;

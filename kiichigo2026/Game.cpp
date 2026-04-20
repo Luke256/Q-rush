@@ -6,8 +6,9 @@ Game::Game(const InitData& init)
 	refreshLevel();
 	getData().score = 0;
 #ifndef SIV3D_WEB
-	AudioAsset(U"bgm").play();
-	AudioAsset(U"bgm").setVolume(0.25);
+	getData().bgm.setLoop(true);
+	getData().bgm.setVolume(0.25);
+	getData().bgm.play();
 #endif
 }
 
@@ -40,7 +41,7 @@ void Game::draw() const
 void Game::nextLevel()
 {
 #ifndef SIV3D_WEB
-	AudioAsset(U"ok").playOneShot(0.7);
+	getData().seOk.playOneShot(0.7);
 #endif
 
 	getData().score += 1;
@@ -49,7 +50,7 @@ void Game::nextLevel()
 		m_difficulty++;
 		m_bgEffectInterval *= 0.8;
 #ifndef SIV3D_WEB
-		AudioAsset(U"extend").playOneShot(0.7);
+		getData().seExtend.playOneShot(0.7);
 #endif
 	}
 
@@ -229,13 +230,13 @@ void Game::inGameUpdate()
 			{
 				m_effects.add<SlashEffect>(item.pos + Vec2{ 0, 60 }, 120);
 #ifndef SIV3D_WEB
-				AudioAsset(U"slash").playOneShot(0.4, (item.pos.x - Scene::Width() / 2) / Scene::Width() * 2);
+				getData().seSlash.playOneShot(0.4, (item.pos.x - Scene::Width() / 2) / Scene::Width() * 2);
 #endif
 			}
 			else
 			{
 #ifndef SIV3D_WEB
-				AudioAsset(U"unslash").playOneShot(0.4, (item.pos.x - Scene::Width() / 2) / Scene::Width() * 2);
+				getData().seUnslash.playOneShot(0.4, (item.pos.x - Scene::Width() / 2) / Scene::Width() * 2);
 #endif
 			}
 		}
@@ -275,7 +276,7 @@ void Game::inGameDraw() const
 	const double TimerWidth = 250;
 	const double timeT = Max(0.0, m_timeLimit / TimeLimit);
 	const Color timerColor = (m_timeLimit < 2.0) ? Palette::Crimson : Palette::White;
-	const double timerLength = timeT * timeT * TimerWidth;
+	const double timerLength = EaseInSine(timeT) * TimerWidth;
 	Line{ Vec2{ Scene::Width() / 2, 50 }, Arg::direction = Vec2::Left() * timerLength }.draw(8, timerColor);
 	Line{ Vec2{ Scene::Width() / 2, 50 }, Arg::direction = Vec2::Right() * timerLength }.draw(8, timerColor);
 }
@@ -286,8 +287,8 @@ void Game::gameOver()
 	m_resultTimer = 0.0;
 
 #ifndef SIV3D_WEB
-	AudioAsset(U"bgm").fadeVolume(0.1, 1s);
-	AudioAsset(U"miss").playOneShot(0.7);
+	getData().bgm.fadeVolume(0.1, 1s);
+	getData().seMiss.playOneShot(0.7);
 #endif
 }
 
@@ -298,7 +299,7 @@ void Game::resultUpdate()
 	if (m_resultTimer > 1.0 and MouseL.down())
 	{
 #ifndef SIV3D_WEB
-		AudioAsset(U"bgm").stop(1s);
+		getData().bgm.stop(1s);
 #endif
 		changeScene(U"Title");
 	}
