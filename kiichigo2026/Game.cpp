@@ -5,9 +5,10 @@ Game::Game(const InitData& init)
 {
 	refreshLevel();
 	getData().score = 0;
+#ifndef SIV3D_WEB
 	AudioAsset(U"bgm").play();
 	AudioAsset(U"bgm").setVolume(0.25);
-
+#endif
 }
 
 void Game::update()
@@ -38,14 +39,18 @@ void Game::draw() const
 
 void Game::nextLevel()
 {
+#ifndef SIV3D_WEB
 	AudioAsset(U"ok").playOneShot(0.7);
+#endif
 
 	getData().score += 1;
 	if (levelStep[Min(m_difficulty, (int32)levelStep.size() - 1)] == getData().score)
 	{
 		m_difficulty++;
 		m_bgEffectInterval *= 0.8;
+#ifndef SIV3D_WEB
 		AudioAsset(U"extend").playOneShot(0.7);
+#endif
 	}
 
 	for (const auto& item : m_queItems)
@@ -223,11 +228,15 @@ void Game::inGameUpdate()
 			if (item.active)
 			{
 				m_effects.add<SlashEffect>(item.pos + Vec2{ 0, 60 }, 120);
+#ifndef SIV3D_WEB
 				AudioAsset(U"slash").playOneShot(0.4, (item.pos.x - Scene::Width() / 2) / Scene::Width() * 2);
+#endif
 			}
 			else
 			{
+#ifndef SIV3D_WEB
 				AudioAsset(U"unslash").playOneShot(0.4, (item.pos.x - Scene::Width() / 2) / Scene::Width() * 2);
+#endif
 			}
 		}
 	}
@@ -276,8 +285,10 @@ void Game::gameOver()
 	GamePhase = Result;
 	m_resultTimer = 0.0;
 
+#ifndef SIV3D_WEB
 	AudioAsset(U"bgm").fadeVolume(0.1, 1s);
 	AudioAsset(U"miss").playOneShot(0.7);
+#endif
 }
 
 void Game::resultUpdate()
@@ -286,7 +297,9 @@ void Game::resultUpdate()
 
 	if (m_resultTimer > 1.0 and MouseL.down())
 	{
+#ifndef SIV3D_WEB
 		AudioAsset(U"bgm").stop(1s);
+#endif
 		changeScene(U"Title");
 	}
 }

@@ -11,7 +11,9 @@ void Title::update()
 	{
 		changeScene(U"Game", 1.0);
 
+#ifndef SIV3D_WEB
 		AudioAsset(U"extend").playOneShot(0.5);
+#endif
 	}
 }
 
