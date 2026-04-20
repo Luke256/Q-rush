@@ -45,7 +45,7 @@ void Game::nextLevel()
 	{
 		m_difficulty++;
 		m_bgEffectInterval *= 0.8;
-		AudioAsset(U"extend").playOneShot(0.5);
+		AudioAsset(U"extend").playOneShot(0.7);
 	}
 
 	for (const auto& item : m_queItems)
@@ -111,12 +111,14 @@ void Game::refreshLevel()
 
 LevelData::LevelData(int32 difficulty)
 {
-	const Array<int32> queSizeList{ 7, 9, 12, 15, 16, 17, 18, 19, 20 };
-	const Array<int32> groupSizeList{ 2, 3, 3, 3, 4, 4, 5, 5, 5 };
+	const Array<int32> queSizeList	{ 5, 7, 7,	9,	9, 12, 12, 15,	17 };
+	const Array<int32> groupSizeList{ 2, 3, 3,	3,	4,	4,	5,	5,	5 };
+	const Array<int32> maxGroupsList{ 2, 3, 5,	10, 20, 30, 40, 50, 60 };
 	const Array<bool> shuffleList{ false, false, true, true, true, true, true };
 
 	int32 queSize = queSizeList[Min(difficulty, (int32)queSizeList.size() - 1)];
 	int32 groupSize = groupSizeList[Min(difficulty, (int32)groupSizeList.size() - 1)];
+	int32 maxGroups = maxGroupsList[Min(difficulty, (int32)maxGroupsList.size() - 1)];
 	bool shuffle = shuffleList[Min(difficulty, (int32)shuffleList.size() - 1)]; // グループをシャッフルするかどうか
 
 	// 総和が queSize になるように長さ 2 以上のランダムな整数列を生成して、queue とする
@@ -128,7 +130,7 @@ LevelData::LevelData(int32 difficulty)
 		queue.clear();
 		queTotal = 0;
 
-		while (queTotal < queSize)
+		while (queTotal < queSize and queue.size() < maxGroups)
 		{
 			int32 val = static_cast<int32>(dist(GetDefaultRNG())) + 1;
 			queue.push_back(val);

@@ -114,7 +114,7 @@ public:
 	void update() override;
 	void draw() const override;
 private:
-	const Array<int32> levelStep{ 5, 10, 15, 20, 25, 30, 35, 40, 45, 50 };
+	const Array<int32> levelStep{ 5, 10, 15, 25, 35, 45, 60, 75, 90, 100 };
 	const double TimeLimit = 8.0;
 
 	LevelData m_levelData;
