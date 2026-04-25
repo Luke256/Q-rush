@@ -91,6 +91,7 @@ void Game::refreshLevel()
 		m_splitItems << SplitItem{
 			Vec2{ Scene::Width() * 2, QueLineUpY },
 			Vec2{ (Scene::Width() / 2) + (idx - (m_levelData.queTotal - 1.0) / 2.0) * margin - margin / 2, QueLineUpY},
+			(double)margin,
 		};
 	}
 	m_splitItems.pop_back();
@@ -289,7 +290,7 @@ void Game::resultUpdate()
 	if (m_resultTimer > 1.0 and MouseL.down())
 	{
 		getData().bgm.stop(1s);
-		changeScene(U"Title");
+		changeScene(U"Title", 0s);
 	}
 }
 
@@ -311,10 +312,12 @@ void Game::resultDraw() const
 		return;
 	}
 
-	FontAsset(U"font")(U"スコア:").draw(Arg::rightCenter(Scene::Width() / 2, Scene::Height() / 2 - 50));
-	FontAsset(U"font")(U"{}"_fmt(getData().score)).draw(Arg::leftCenter(Scene::Width() / 2 + 20, Scene::Height() / 2 - 50));
-	FontAsset(U"font")(U"難易度:").draw(Arg::rightCenter(Scene::Width() / 2, Scene::Height() / 2 + 50));
-	FontAsset(U"font")(U"{}"_fmt(m_difficulty + 1)).draw(Arg::leftCenter(Scene::Width() / 2 + 20, Scene::Height() / 2 + 50));
+	FontAsset(U"font")(U"モード:").draw(48, Arg::rightCenter(Scene::Width() / 2, Scene::Height() / 2 - 100));
+	FontAsset(U"font")(m_gameMode).draw(48, Arg::leftCenter(Scene::Width() / 2, Scene::Height() / 2 - 100));
+	FontAsset(U"font")(U"スコア:").draw(48, Arg::rightCenter(Scene::Width() / 2, Scene::Height() / 2));
+	FontAsset(U"font")(U"{}"_fmt(getData().score)).draw(48, Arg::leftCenter(Scene::Width() / 2 + 20, Scene::Height() / 2));
+	FontAsset(U"font")(U"難易度:").draw(48, Arg::rightCenter(Scene::Width() / 2, Scene::Height() / 2 + 100));
+	FontAsset(U"font")(U"{}"_fmt(m_difficulty + 1)).draw(48, Arg::leftCenter(Scene::Width() / 2 + 20, Scene::Height() / 2 + 100));
 
 	FontAsset(U"font")(U"クリックしてタイトルへ").drawAt(24, Vec2{ Scene::Width() / 2, Scene::Height() - 100 }, Palette::White);
 }

@@ -33,11 +33,12 @@ struct QueItem
 struct SplitItem
 {
 	Vec2 pos, targetPos;
+	double width = 0.0;
 	bool active = false;
 
 	RectF getRect() const
 	{
-		return RectF{ pos - Vec2{ 16, 50 }, Vec2{ 32, 100 }};
+		return RectF{ pos - Vec2{ width / 2, 80 }, Vec2{ width, 160 }};
 	}
 
 	void update()
