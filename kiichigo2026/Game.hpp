@@ -142,7 +142,7 @@ private:
 			GameConfig {
 				.GroupSizeList	{ 2, 3, 3,	3,	4,	4,	5,	5,	5 },
 				.LevelStep		{ 5, 10, 15, 25, 30, 40, 50, 60, 70, 80 },
-				.MaxGroupsList	{ 3, 3, 5,	10, 20, 30, 40, 50, 60 },
+				.MaxGroupsList	{ 3, 10, 10, 10, 10, 20, 30, 40, 50, 60 },
 				.QueSizeList	{ 5, 7, 10, 13, 14, 15, 16, 17, 18 },
 				.ShuffleList	{ true, true, true, true, true, true, true },
 			}

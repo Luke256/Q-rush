@@ -313,7 +313,7 @@ void Game::resultDraw() const
 	}
 
 	FontAsset(U"font")(U"モード:").draw(48, Arg::rightCenter(Scene::Width() / 2, Scene::Height() / 2 - 100));
-	FontAsset(U"font")(m_gameMode).draw(48, Arg::leftCenter(Scene::Width() / 2, Scene::Height() / 2 - 100));
+	FontAsset(U"font")(m_gameMode).draw(48, Arg::leftCenter(Scene::Width() / 2 + 20, Scene::Height() / 2 - 100));
 	FontAsset(U"font")(U"スコア:").draw(48, Arg::rightCenter(Scene::Width() / 2, Scene::Height() / 2));
 	FontAsset(U"font")(U"{}"_fmt(getData().score)).draw(48, Arg::leftCenter(Scene::Width() / 2 + 20, Scene::Height() / 2));
 	FontAsset(U"font")(U"難易度:").draw(48, Arg::rightCenter(Scene::Width() / 2, Scene::Height() / 2 + 100));
