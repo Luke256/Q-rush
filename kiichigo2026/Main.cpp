@@ -57,7 +57,7 @@ void Main()
 
 	}
 #else
-	manager.get()->bgm = Audio(Resource(U"data/237_BPM152.mp3"));
+	manager.get()->bgm = Audio(Audio::Stream, Resource(U"data/237_BPM152.mp3"));
 	manager.get()->seSlash = Audio(Resource(U"data/Motion-Swish07-1.mp3"));
 	manager.get()->seUnslash = Audio(Resource(U"data/Motion-Swish07-4.mp3"));
 	manager.get()->seMiss = Audio(Resource(U"data/Hit-Punch01-2.mp3"));

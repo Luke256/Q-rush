@@ -1,7 +1,8 @@
 ﻿# pragma once
 
 # include "Main.hpp"
-# include "MyEffect.hpp"
+
+struct GameConfig;
 
 struct LevelData
 {
@@ -9,7 +10,7 @@ struct LevelData
 	int32 queTotal = 0;
 
 	LevelData() = default;
-	LevelData(int32 difficulty);
+	LevelData(int32 difficulty, const GameConfig& config);
 };
 
 struct QueItem
@@ -91,6 +92,15 @@ struct GroupItem
 	}
 };
 
+struct GameConfig
+{
+	Array<int32> GroupSizeList;
+	Array<int32> LevelStep;
+	Array<int32> MaxGroupsList;
+	Array<int32> QueSizeList;
+	Array<bool> ShuffleList;
+};
+
 class Game : public MyApp::Scene
 {
 	enum Phase
@@ -114,9 +124,32 @@ public:
 	void update() override;
 	void draw() const override;
 private:
-	const Array<int32> levelStep{ 5, 10, 15, 25, 35, 45, 60, 75, 90, 100 };
 	const double TimeLimit = 8.0;
+	const HashTable<String, GameConfig> gameConfigs = {
+		{
+			U"ノーマル",
+			GameConfig {
+				.GroupSizeList	{ 2, 3, 3,	3,	4,	4,	5,	5,	5 },
+				.LevelStep		{ 3, 6, 10, 15, 25, 35, 45, 55, 70, 85 },
+				.MaxGroupsList	{ 2, 3, 5,	10, 20, 30, 40, 50, 60 },
+				.QueSizeList	{ 5, 7, 7,	9,	9, 12, 12, 15,	17 },
+				.ShuffleList	{ false, false, true, true, true, true, true },
+			}
+		},
+		{
+			U"エキスパート",
+			GameConfig {
+				.GroupSizeList	{ 2, 3, 3,	3,	4,	4,	5,	5,	5 },
+				.LevelStep		{ 5, 10, 15, 25, 30, 40, 50, 60, 70, 80 },
+				.MaxGroupsList	{ 3, 3, 5,	10, 20, 30, 40, 50, 60 },
+				.QueSizeList	{ 5, 7, 10, 13, 14, 15, 16, 17, 18 },
+				.ShuffleList	{ true, true, true, true, true, true, true },
+			}
+		},
+	};
 
+	String m_gameMode;
+	Array<int32> levelStep;
 	LevelData m_levelData;
 	int32 m_difficulty = 0;
 	double m_timeLimit = 0.0;
@@ -124,7 +157,6 @@ private:
 	Array<SplitItem> m_splitItems;
 	Array<GroupItem> m_groupItems;
 	Phase GamePhase = InGame;
-	MyEffectManager m_effects;
 
 	double m_resultTimer = 0.0;
 	double m_bgEffectInterval = 0.5;

@@ -1,7 +1,9 @@
 ﻿# include "Game.hpp"
 
 Game::Game(const InitData& init)
-  : IScene(init)
+  : IScene(init),
+	m_gameMode(getData().GameModeList[getData().GameMode]),
+	levelStep(gameConfigs.at(m_gameMode).LevelStep)
 {
 	refreshLevel();
 	getData().score = 0;
@@ -20,7 +22,7 @@ void Game::update()
 	{
 		resultUpdate();
 	}
-	m_effects.update();
+	getData().m_effects.update();
 }
 
 void Game::draw() const
@@ -33,7 +35,7 @@ void Game::draw() const
 	{
 		resultDraw();
 	}
-	m_effects.draw();
+	getData().m_effects.draw();
 }
 
 void Game::nextLevel()
@@ -50,7 +52,7 @@ void Game::nextLevel()
 
 	for (const auto& item : m_queItems)
 	{
-		m_effects.add<SparkEffect>(item.pos);
+		getData().m_effects.add<SparkEffect>(item.pos);
 	}
 
 	refreshLevel();
@@ -60,7 +62,7 @@ void Game::refreshLevel()
 {
 	m_timeLimit = TimeLimit;
 
-	m_levelData = LevelData(m_difficulty);
+	m_levelData = LevelData(m_difficulty, gameConfigs.at(m_gameMode));
 
 	int32 margin = Min(80, (Scene::Width() - 100) / (m_levelData.queTotal - 1));
 	int32 idx = 0;
@@ -109,12 +111,12 @@ void Game::refreshLevel()
 	}
 }
 
-LevelData::LevelData(int32 difficulty)
+LevelData::LevelData(int32 difficulty, const GameConfig& config)
 {
-	const Array<int32> queSizeList	{ 5, 7, 7,	9,	9, 12, 12, 15,	17 };
-	const Array<int32> groupSizeList{ 2, 3, 3,	3,	4,	4,	5,	5,	5 };
-	const Array<int32> maxGroupsList{ 2, 3, 5,	10, 20, 30, 40, 50, 60 };
-	const Array<bool> shuffleList{ false, false, true, true, true, true, true };
+	const Array<int32> &queSizeList = config.QueSizeList;
+	const Array<int32> &groupSizeList = config.GroupSizeList;
+	const Array<int32> &maxGroupsList = config.MaxGroupsList;
+	const Array<bool> &shuffleList = config.ShuffleList;
 
 	int32 queSize = queSizeList[Min(difficulty, (int32)queSizeList.size() - 1)];
 	int32 groupSize = groupSizeList[Min(difficulty, (int32)groupSizeList.size() - 1)];
@@ -193,7 +195,7 @@ void Game::inGameUpdate()
 	if (m_bgEffectTimer > m_bgEffectInterval)
 	{
 		m_bgEffectTimer = 0.0;
-		m_effects.add<BubbleEffect>();
+		getData().m_effects.add<BubbleEffect>();
 	}
 
 	for (auto& item : m_queItems)
@@ -222,7 +224,7 @@ void Game::inGameUpdate()
 
 			if (item.active)
 			{
-				m_effects.add<SlashEffect>(item.pos + Vec2{ 0, 60 }, 120);
+				getData().m_effects.add<SlashEffect>(item.pos + Vec2{ 0, 60 }, 120);
 				getData().seSlash.playOneShot(0.4, (item.pos.x - Scene::Width() / 2) / Scene::Width() * 2);
 			}
 			else
